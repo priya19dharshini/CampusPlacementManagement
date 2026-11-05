@@ -35,4 +35,16 @@ public class PlacementOfficerRepository : IPlacementOfficerRepository
 
         await _context.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task<PlacementOfficer?> GetByIdWithUserAsync(
+    int placementOfficerId,
+    CancellationToken cancellationToken)
+    {
+        return await _context.PlacementOfficers
+            .AsNoTracking()
+            .Include(po => po.User)
+            .FirstOrDefaultAsync(
+                po => po.PlacementOfficerId == placementOfficerId,
+                cancellationToken);
+    }
 }

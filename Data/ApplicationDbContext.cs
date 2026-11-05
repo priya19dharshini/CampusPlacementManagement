@@ -21,6 +21,7 @@ namespace CampusPlacementManagement.Data
 
         public DbSet<CompanyHR> CompanyHRs { get; set; }
 
+        public DbSet<Student> Students { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -166,6 +167,63 @@ namespace CampusPlacementManagement.Data
                 entity.HasOne(hr => hr.ApprovedByUser)
                     .WithMany()
                     .HasForeignKey(hr => hr.ApprovedBy)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            builder.Entity<Student>(entity =>
+            {
+                entity.HasKey(s => s.StudentId);
+
+                entity.Property(s => s.UserId)
+                    .IsRequired();
+
+                entity.HasIndex(s => s.UserId)
+                    .IsUnique();
+
+                entity.Property(s => s.RegisterNumber)
+                    .HasMaxLength(50)
+                    .IsRequired();
+
+                entity.HasIndex(s => new { s.CollegeId, s.RegisterNumber })
+                    .IsUnique();
+
+                entity.Property(s => s.Department)
+                    .HasMaxLength(100)
+                    .IsRequired();
+
+                entity.Property(s => s.Degree)
+                    .HasMaxLength(100)
+                    .IsRequired();
+
+                entity.Property(s => s.GraduationYear)
+                    .IsRequired();
+
+                entity.Property(s => s.CGPA)
+                    .HasPrecision(4, 2)
+                    .IsRequired();
+
+                entity.Property(s => s.ActiveBacklogs)
+                    .IsRequired();
+
+                entity.Property(s => s.ResumeUrl)
+                    .HasMaxLength(500);
+
+                entity.Property(s => s.ApprovedAt)
+                    .IsRequired(false);
+
+                entity.HasOne(s => s.User)
+                    .WithOne()
+                    .HasForeignKey<Student>(s => s.UserId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(s => s.College)
+                    .WithMany()
+                    .HasForeignKey(s => s.CollegeId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(s => s.PlacementOfficer)
+                    .WithMany()
+                    .HasForeignKey(s => s.PlacementOfficerId)
                     .OnDelete(DeleteBehavior.Restrict);
             });
         }

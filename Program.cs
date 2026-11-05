@@ -24,13 +24,13 @@ builder.Services.AddScoped<ICollegeRepository, CollegeRepository>();
 builder.Services.AddScoped<IPlacementOfficerRepository,PlacementOfficerRepository>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 builder.Services.AddScoped<ICompanyHRRepository, CompanyHRRepository>();
-
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 
 builder.Services.AddScoped<ICollegeService, CollegeService>();
 builder.Services.AddScoped<IPlacementOfficerService,PlacementOfficerService>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddScoped<ICompanyHRService, CompanyHRService>();
-
+builder.Services.AddScoped<IStudentService, StudentService>();
 
 
 // Add services to the container.

@@ -11,5 +11,9 @@ namespace CampusPlacementManagement.Repositories.Interfaces
         Task AddAsync(
             PlacementOfficer placementOfficer,
             CancellationToken cancellationToken);
+
+        Task<PlacementOfficer?> GetByIdWithUserAsync(
+    int placementOfficerId,
+    CancellationToken cancellationToken);
     }
 }
