@@ -15,6 +15,8 @@ namespace CampusPlacementManagement.Data
 
         public DbSet<College> Colleges { get; set; }
 
+        public DbSet<PlacementOfficer> PlacementOfficers { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -59,6 +61,42 @@ namespace CampusPlacementManagement.Data
 
                 entity.Property(c => c.CreatedAt)
                     .IsRequired();
+            });
+
+            builder.Entity<PlacementOfficer>(entity =>
+            {
+                entity.HasKey(po => po.PlacementOfficerId);
+
+                entity.Property(po => po.UserId)
+                    .IsRequired();
+
+                entity.HasIndex(po => po.UserId)
+                    .IsUnique();
+
+                entity.Property(po => po.Designation)
+                    .HasMaxLength(100)
+                    .IsRequired();
+
+                entity.Property(po => po.ApprovedBy)
+                    .IsRequired(false);
+
+                // PlacementOfficer -> ApplicationUser (one-to-one)
+                entity.HasOne(po => po.User)
+                    .WithOne()
+                    .HasForeignKey<PlacementOfficer>(po => po.UserId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                // PlacementOfficer -> College (many-to-one)
+                entity.HasOne(po => po.College)
+                    .WithMany()
+                    .HasForeignKey(po => po.CollegeId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                // PlacementOfficer -> Approving ApplicationUser
+                entity.HasOne(po => po.ApprovedByUser)
+                    .WithMany()
+                    .HasForeignKey(po => po.ApprovedBy)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
         }
     }

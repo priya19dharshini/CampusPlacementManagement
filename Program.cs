@@ -1,10 +1,12 @@
 using CampusPlacementManagement.Data;
-using Microsoft.EntityFrameworkCore;
-using Scalar.AspNetCore;
+using CampusPlacementManagement.Models;
 using CampusPlacementManagement.Repositories;
 using CampusPlacementManagement.Repositories.Interfaces;
 using CampusPlacementManagement.Services;
 using CampusPlacementManagement.Services.Interfaces;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Scalar.AspNetCore;
 
 
 
@@ -18,10 +20,34 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     )
 );
 
+// Add Data Protection
+builder.Services.AddDataProtection();
+
+builder.Services
+    .AddIdentityCore<ApplicationUser>(options =>
+    {
+        options.User.RequireUniqueEmail = true;
+
+        options.Password.RequiredLength = 8;
+        options.Password.RequireDigit = true;
+        options.Password.RequireUppercase = true;
+        options.Password.RequireLowercase = true;
+        options.Password.RequireNonAlphanumeric = true;
+    })
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+
 
 builder.Services.AddScoped<ICollegeRepository, CollegeRepository>();
+builder.Services.AddScoped<
+    IPlacementOfficerRepository,
+    PlacementOfficerRepository>();
 
 builder.Services.AddScoped<ICollegeService, CollegeService>();
+builder.Services.AddScoped<
+    IPlacementOfficerService,
+    PlacementOfficerService>();
 
 // Add services to the container.
 

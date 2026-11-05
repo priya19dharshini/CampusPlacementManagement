@@ -35,4 +35,15 @@ public class CollegeRepository : ICollegeRepository
 
         await _context.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task<College?> GetByIdAsync(
+    int collegeId,
+    CancellationToken cancellationToken)
+    {
+        return await _context.Colleges
+            .AsNoTracking()
+            .FirstOrDefaultAsync(
+                college => college.CollegeId == collegeId,
+                cancellationToken);
+    }
 }

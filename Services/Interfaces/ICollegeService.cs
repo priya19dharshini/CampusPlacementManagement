@@ -7,4 +7,6 @@ public interface ICollegeService
     Task<CollegeResponseDto> RegisterCollegeAsync(
         CollegeRegistrationDto registrationDto,
         CancellationToken cancellationToken);
+
+
 }

@@ -11,5 +11,10 @@ namespace CampusPlacementManagement.Repositories.Interfaces
         Task AddAsync(
             College college,
             CancellationToken cancellationToken);
+
+        Task<College?> GetByIdAsync(
+    int collegeId,
+    CancellationToken cancellationToken);
     }
+
 }
