@@ -17,6 +17,8 @@ namespace CampusPlacementManagement.Data
 
         public DbSet<PlacementOfficer> PlacementOfficers { get; set; }
 
+        public DbSet<Company> Companies { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -98,6 +100,44 @@ namespace CampusPlacementManagement.Data
                     .HasForeignKey(po => po.ApprovedBy)
                     .OnDelete(DeleteBehavior.Restrict);
             });
+
+            builder.Entity<Company>(entity =>
+            {
+                entity.HasKey(c => c.CompanyId);
+
+                entity.Property(c => c.CompanyName)
+                    .HasMaxLength(200)
+                    .IsRequired();
+
+                entity.Property(c => c.CompanyEmail)
+                    .HasMaxLength(255)
+                    .IsRequired();
+
+                entity.Property(c => c.Website)
+                    .HasMaxLength(255);
+
+                entity.Property(c => c.Industry)
+                    .HasMaxLength(100)
+                    .IsRequired();
+
+                entity.Property(c => c.Address)
+                    .HasMaxLength(500)
+                    .IsRequired();
+
+                entity.Property(c => c.Description);
+
+                entity.Property(c => c.Status)
+                    .HasConversion<string>()
+                    .HasMaxLength(50)
+                    .IsRequired();
+
+                entity.Property(c => c.CreatedAt)
+                    .IsRequired();
+            });
         }
+
+
     }
+
+
 }
