@@ -11,4 +11,8 @@ public interface ICompanyHRRepository
     Task AddAsync(
         CompanyHR companyHR,
         CancellationToken cancellationToken);
+
+    Task<CompanyHR?> GetByUserIdWithCompanyAsync(
+    string userId,
+    CancellationToken cancellationToken);
 }

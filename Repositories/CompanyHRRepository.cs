@@ -35,4 +35,17 @@ public class CompanyHRRepository : ICompanyHRRepository
 
         await _context.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task<CompanyHR?> GetByUserIdWithCompanyAsync(
+    string userId,
+    CancellationToken cancellationToken)
+    {
+        return await _context.CompanyHRs
+            .AsNoTracking()
+            .Include(hr => hr.Company)
+            .Include(hr => hr.User)
+            .FirstOrDefaultAsync(
+                hr => hr.UserId == userId,
+                cancellationToken);
+    }
 }

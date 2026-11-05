@@ -22,9 +22,115 @@ namespace CampusPlacementManagement.Data
         public DbSet<CompanyHR> CompanyHRs { get; set; }
 
         public DbSet<Student> Students { get; set; }
+
+        public DbSet<JobOpening> JobOpenings { get; set; }
+
+        public DbSet<JobTargetCollege> JobTargetColleges { get; set; }
+        public DbSet<JobEligibleDepartment> JobEligibleDepartments { get; set; }
+        public DbSet<JobEligibleGraduationYear> JobEligibleGraduationYears { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            builder.Entity<JobOpening>(entity =>
+            {
+                entity.HasKey(j => j.JobId);
+
+                entity.Property(j => j.JobTitle)
+                    .HasMaxLength(200)
+                    .IsRequired();
+
+                entity.Property(j => j.JobDescription)
+                    .IsRequired();
+
+                entity.Property(j => j.JobType)
+                    .HasMaxLength(50)
+                    .IsRequired();
+
+                entity.Property(j => j.Location)
+                    .HasMaxLength(200)
+                    .IsRequired();
+
+                entity.Property(j => j.SalaryPackage)
+                    .HasPrecision(12, 2);
+
+                entity.Property(j => j.MinimumCGPA)
+                    .HasPrecision(4, 2);
+
+                entity.Property(j => j.ApplicationDeadline)
+                    .IsRequired();
+
+                entity.Property(j => j.IsOpenToAllColleges)
+                    .IsRequired();
+
+                entity.Property(j => j.Status)
+                    .HasConversion<string>()
+                    .HasMaxLength(50)
+                    .IsRequired();
+
+                entity.Property(j => j.CreatedAt)
+                    .IsRequired();
+
+                entity.HasOne(j => j.Company)
+                    .WithMany()
+                    .HasForeignKey(j => j.CompanyId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(j => j.CreatedByHR)
+                    .WithMany()
+                    .HasForeignKey(j => j.CreatedByHRId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            // Job Target College
+            builder.Entity<JobTargetCollege>(entity =>
+            {
+                entity.HasKey(jtc => jtc.JobTargetCollegeId);
+
+                entity.HasIndex(jtc => new { jtc.JobId, jtc.CollegeId })
+                    .IsUnique();
+
+                entity.HasOne(jtc => jtc.Job)
+                    .WithMany()
+                    .HasForeignKey(jtc => jtc.JobId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(jtc => jtc.College)
+                    .WithMany()
+                    .HasForeignKey(jtc => jtc.CollegeId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            // Job Eligible Department
+            builder.Entity<JobEligibleDepartment>(entity =>
+            {
+                entity.HasKey(jed => jed.JobEligibleDepartmentId);
+
+                entity.Property(jed => jed.Department)
+                    .HasMaxLength(100)
+                    .IsRequired();
+
+                entity.HasIndex(jed => new { jed.JobId, jed.Department })
+                    .IsUnique();
+
+                entity.HasOne(jed => jed.Job)
+                    .WithMany()
+                    .HasForeignKey(jed => jed.JobId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            // Job Eligible Graduation Year
+            builder.Entity<JobEligibleGraduationYear>(entity =>
+            {
+                entity.HasKey(jgy => jgy.JobEligibleGraduationYearId);
+
+                entity.HasIndex(jgy => new { jgy.JobId, jgy.GraduationYear })
+                    .IsUnique();
+
+                entity.HasOne(jgy => jgy.Job)
+                    .WithMany()
+                    .HasForeignKey(jgy => jgy.JobId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
 
             builder.Entity<College>(entity =>
             {
