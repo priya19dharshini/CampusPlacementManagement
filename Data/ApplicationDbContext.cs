@@ -28,6 +28,8 @@ namespace CampusPlacementManagement.Data
         public DbSet<JobTargetCollege> JobTargetColleges { get; set; }
         public DbSet<JobEligibleDepartment> JobEligibleDepartments { get; set; }
         public DbSet<JobEligibleGraduationYear> JobEligibleGraduationYears { get; set; }
+        public DbSet<JobApplication> JobApplications { get; set; }
+        public DbSet<ApplicationStatusHistory> ApplicationStatusHistories { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -330,6 +332,72 @@ namespace CampusPlacementManagement.Data
                 entity.HasOne(s => s.PlacementOfficer)
                     .WithMany()
                     .HasForeignKey(s => s.PlacementOfficerId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            builder.Entity<JobApplication>(entity =>
+            {
+                entity.HasKey(ja => ja.JobApplicationId);
+
+                entity.HasIndex(ja => new { ja.StudentId, ja.JobId })
+                    .IsUnique();
+
+                entity.HasIndex(ja => ja.JobId);
+
+                entity.Property(ja => ja.Status)
+                    .HasConversion<string>()
+                    .HasMaxLength(50)
+                    .IsRequired();
+
+                entity.Property(ja => ja.AppliedAt)
+                    .IsRequired();
+
+                entity.Property(ja => ja.UpdatedAt)
+                    .IsRequired();
+
+                entity.HasOne(ja => ja.Student)
+                    .WithMany()
+                    .HasForeignKey(ja => ja.StudentId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(ja => ja.Job)
+                    .WithMany()
+                    .HasForeignKey(ja => ja.JobId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            builder.Entity<ApplicationStatusHistory>(entity =>
+            {
+                entity.HasKey(ash => ash.ApplicationStatusHistoryId);
+
+                entity.HasIndex(ash => new { ash.JobApplicationId, ash.UpdatedAt });
+
+                entity.Property(ash => ash.PreviousStatus)
+                    .HasConversion<string>()
+                    .HasMaxLength(50);
+
+                entity.Property(ash => ash.Status)
+                    .HasConversion<string>()
+                    .HasMaxLength(50)
+                    .IsRequired();
+
+                entity.Property(ash => ash.Notes)
+                    .HasMaxLength(1000);
+
+                entity.Property(ash => ash.UpdatedByUserId)
+                    .IsRequired();
+
+                entity.Property(ash => ash.UpdatedAt)
+                    .IsRequired();
+
+                entity.HasOne(ash => ash.JobApplication)
+                    .WithMany(ja => ja.StatusHistory)
+                    .HasForeignKey(ash => ash.JobApplicationId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(ash => ash.UpdatedByUser)
+                    .WithMany()
+                    .HasForeignKey(ash => ash.UpdatedByUserId)
                     .OnDelete(DeleteBehavior.Restrict);
             });
         }
