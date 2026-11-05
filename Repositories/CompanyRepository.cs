@@ -35,4 +35,15 @@ public class CompanyRepository : ICompanyRepository
 
         await _context.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task<Company?> GetByIdAsync(
+    int companyId,
+    CancellationToken cancellationToken)
+    {
+        return await _context.Companies
+            .AsNoTracking()
+            .FirstOrDefaultAsync(
+                company => company.CompanyId == companyId,
+                cancellationToken);
+    }
 }

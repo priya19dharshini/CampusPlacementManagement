@@ -11,4 +11,8 @@ public interface ICompanyRepository
     Task AddAsync(
         Company company,
         CancellationToken cancellationToken);
+
+    Task<Company?> GetByIdAsync(
+    int companyId,
+    CancellationToken cancellationToken);
 }

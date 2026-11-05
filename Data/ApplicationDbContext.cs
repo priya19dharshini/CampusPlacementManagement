@@ -19,6 +19,8 @@ namespace CampusPlacementManagement.Data
 
         public DbSet<Company> Companies { get; set; }
 
+        public DbSet<CompanyHR> CompanyHRs { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -133,6 +135,38 @@ namespace CampusPlacementManagement.Data
 
                 entity.Property(c => c.CreatedAt)
                     .IsRequired();
+            });
+
+            builder.Entity<CompanyHR>(entity =>
+            {
+                entity.HasKey(hr => hr.CompanyHRId);
+
+                entity.Property(hr => hr.UserId)
+                    .IsRequired();
+
+                entity.HasIndex(hr => hr.UserId)
+                    .IsUnique();
+
+                entity.Property(hr => hr.Designation)
+                    .HasMaxLength(100);
+
+                entity.Property(hr => hr.ApprovedBy)
+                    .IsRequired(false);
+
+                entity.HasOne(hr => hr.User)
+                    .WithOne()
+                    .HasForeignKey<CompanyHR>(hr => hr.UserId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(hr => hr.Company)
+                    .WithMany()
+                    .HasForeignKey(hr => hr.CompanyId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(hr => hr.ApprovedByUser)
+                    .WithMany()
+                    .HasForeignKey(hr => hr.ApprovedBy)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
         }
 
