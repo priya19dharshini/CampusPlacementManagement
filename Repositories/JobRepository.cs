@@ -43,4 +43,27 @@ public class JobRepository : IJobRepository
         // Save everything together
         await _context.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task<JobOpening?> GetByIdAsync(
+    int jobId,
+    CancellationToken cancellationToken)
+    {
+        return await _context.JobOpenings
+            .AsNoTracking()
+            .FirstOrDefaultAsync(
+                job => job.JobId == jobId,
+                cancellationToken);
+    }
+
+    public async Task<bool> HasTargetCollegeAsync(
+    int jobId,
+    int collegeId,
+    CancellationToken cancellationToken)
+    {
+        return await _context.JobTargetColleges
+            .AnyAsync(
+                target => target.JobId == jobId &&
+                          target.CollegeId == collegeId,
+                cancellationToken);
+    }
 }

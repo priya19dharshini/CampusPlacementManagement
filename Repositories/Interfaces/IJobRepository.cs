@@ -10,4 +10,13 @@ public interface IJobRepository
         IReadOnlyCollection<JobEligibleDepartment> eligibleDepartments,
         IReadOnlyCollection<JobEligibleGraduationYear> eligibleGraduationYears,
         CancellationToken cancellationToken);
+
+    Task<JobOpening?> GetByIdAsync(
+        int jobId,
+        CancellationToken cancellationToken);
+
+    Task<bool> HasTargetCollegeAsync(
+        int jobId,
+        int collegeId,
+        CancellationToken cancellationToken);
 }

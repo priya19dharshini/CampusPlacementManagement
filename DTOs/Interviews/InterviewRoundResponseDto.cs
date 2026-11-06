@@ -1,0 +1,14 @@
+﻿namespace CampusPlacementManagement.DTOs.Interviews;
+
+public class InterviewRoundResponseDto
+{
+    public int InterviewRoundId { get; set; }
+
+    public int JobId { get; set; }
+
+    public string RoundName { get; set; } = string.Empty;
+
+    public int RoundNumber { get; set; }
+
+    public string? Description { get; set; }
+}

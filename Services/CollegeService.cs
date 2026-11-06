@@ -65,4 +65,49 @@ public class CollegeService : ICollegeService
             CreatedAt = college.CreatedAt
         };
     }
+
+
+    public async Task<CollegeResponseDto> UpdateCollegeApprovalAsync(
+        int collegeId,
+        CollegeApprovalDto approvalDto,
+        CancellationToken cancellationToken)
+    {
+        var college = await _collegeRepository.GetByIdForUpdateAsync(
+            collegeId,
+            cancellationToken);
+
+        if (college is null)
+        {
+            throw new KeyNotFoundException("College not found.");
+        }
+
+        if (college.Status != CollegeStatus.Pending)
+        {
+            throw new InvalidOperationException(
+                "Only pending colleges can be approved or rejected.");
+        }
+
+        college.Status = approvalDto.IsApproved
+            ? CollegeStatus.Approved
+            : CollegeStatus.Rejected;
+
+        await _collegeRepository.UpdateAsync(
+            college,
+            cancellationToken);
+
+        return new CollegeResponseDto
+        {
+            CollegeId = college.CollegeId,
+            CollegeName = college.CollegeName,
+            CollegeCode = college.CollegeCode,
+            UniversityName = college.UniversityName,
+            OfficialEmail = college.OfficialEmail,
+            PhoneNumber = college.PhoneNumber,
+            Address = college.Address,
+            Website = college.Website,
+            Status = college.Status,
+            CreatedAt = college.CreatedAt
+        };
+    }
+
 }

@@ -1,6 +1,7 @@
 ﻿using CampusPlacementManagement.DTOs.Colleges;
 using CampusPlacementManagement.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CampusPlacementManagement.Controllers;
 
@@ -41,4 +42,43 @@ public class CollegeController : ControllerBase
             });
         }
     }
+
+
+    [HttpPut("{collegeId:int}/approval")]
+    [Authorize(Roles = "SuperAdmin")]
+    public async Task<IActionResult> UpdateCollegeApproval(
+        int collegeId,
+        [FromBody] CollegeApprovalDto approvalDto,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            var result =
+                await _collegeService.UpdateCollegeApprovalAsync(
+                    collegeId,
+                    approvalDto,
+                    cancellationToken);
+
+            return Ok(result);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new ProblemDetails
+            {
+                Status = StatusCodes.Status404NotFound,
+                Title = "College not found",
+                Detail = ex.Message
+            });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Conflict(new ProblemDetails
+            {
+                Status = StatusCodes.Status409Conflict,
+                Title = "College approval conflict",
+                Detail = ex.Message
+            });
+        }
+    }
+
 }

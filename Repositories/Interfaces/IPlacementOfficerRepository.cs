@@ -16,4 +16,8 @@ namespace CampusPlacementManagement.Repositories.Interfaces
     int placementOfficerId,
     CancellationToken cancellationToken);
     }
-}
+
+    Task<PlacementOfficer?> GetByUserIdWithUserAsync(
+    string userId,
+    CancellationToken cancellationToken);
+    }

@@ -25,6 +25,10 @@ builder.Services.AddScoped<ICompanyHRRepository, CompanyHRRepository>();
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IJobRepository, JobRepository>();
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
+builder.Services.AddScoped<IRecruitmentDriveRepository, RecruitmentDriveRepository>();
+builder.Services.AddScoped<IInterviewRoundRepository, InterviewRoundRepository>();
+builder.Services.AddScoped<IInterviewScheduleRepository, InterviewScheduleRepository>();
+builder.Services.AddScoped<IJobApplicationRepository, JobApplicationRepository>();
 
 builder.Services.AddScoped<ICollegeService, CollegeService>();
 builder.Services.AddScoped<IPlacementOfficerService,PlacementOfficerService>();
@@ -33,7 +37,8 @@ builder.Services.AddScoped<ICompanyHRService, CompanyHRService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<IJobService, JobService>();
 builder.Services.AddScoped<IApplicationService, ApplicationService>();
-
+builder.Services.AddScoped<IRecruitmentDriveService, RecruitmentDriveService>();
+builder.Services.AddScoped<IInterviewScheduleService, InterviewScheduleService>();
 // Add services to the container.
 
 builder.Services.AddControllers();

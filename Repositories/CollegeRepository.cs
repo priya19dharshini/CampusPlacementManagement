@@ -46,4 +46,22 @@ public class CollegeRepository : ICollegeRepository
                 college => college.CollegeId == collegeId,
                 cancellationToken);
     }
+
+    public async Task<College?> GetByIdForUpdateAsync(
+    int collegeId,
+    CancellationToken cancellationToken)
+    {
+        return await _context.Colleges
+            .FirstOrDefaultAsync(
+                college => college.CollegeId == collegeId,
+                cancellationToken);
+    }
+
+    public async Task UpdateAsync(
+        College college,
+        CancellationToken cancellationToken)
+    {
+        _context.Colleges.Update(college);
+        await _context.SaveChangesAsync(cancellationToken);
+    }
 }

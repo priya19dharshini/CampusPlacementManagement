@@ -9,4 +9,9 @@ public interface ICollegeService
         CancellationToken cancellationToken);
 
 
+    Task<CollegeResponseDto> UpdateCollegeApprovalAsync(
+        int collegeId,
+        CollegeApprovalDto approvalDto,
+        CancellationToken cancellationToken);
+
 }

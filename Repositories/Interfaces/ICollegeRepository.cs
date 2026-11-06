@@ -15,6 +15,17 @@ namespace CampusPlacementManagement.Repositories.Interfaces
         Task<College?> GetByIdAsync(
     int collegeId,
     CancellationToken cancellationToken);
-    }
 
+
+
+        Task<College?> GetByIdForUpdateAsync(
+            int collegeId,
+            CancellationToken cancellationToken);
+
+        Task UpdateAsync(
+            College college,
+            CancellationToken cancellationToken);
+
+
+    }
 }

@@ -1,0 +1,17 @@
+﻿namespace CampusPlacementManagement.Models;
+
+public class InterviewRound
+{
+    public int InterviewRoundId { get; set; }
+
+    public int JobId { get; set; }
+
+    public string RoundName { get; set; } = string.Empty;
+
+    public int RoundNumber { get; set; }
+
+    public string? Description { get; set; }
+
+    // Navigation property
+    public JobOpening Job { get; set; } = null!;
+}

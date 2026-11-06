@@ -30,6 +30,13 @@ namespace CampusPlacementManagement.Data
         public DbSet<JobEligibleGraduationYear> JobEligibleGraduationYears { get; set; }
         public DbSet<JobApplication> JobApplications { get; set; }
         public DbSet<ApplicationStatusHistory> ApplicationStatusHistories { get; set; }
+
+        public DbSet<RecruitmentDrive> RecruitmentDrives { get; set; }
+
+        public DbSet<InterviewRound> InterviewRounds { get; set; }
+
+        public DbSet<InterviewSchedule> InterviewSchedules { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -398,6 +405,94 @@ namespace CampusPlacementManagement.Data
                 entity.HasOne(ash => ash.UpdatedByUser)
                     .WithMany()
                     .HasForeignKey(ash => ash.UpdatedByUserId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            builder.Entity<RecruitmentDrive>(entity =>
+            {
+                entity.HasKey(rd => rd.DriveId);
+
+                entity.Property(rd => rd.DriveDate)
+                    .IsRequired();
+
+                entity.Property(rd => rd.Venue)
+                    .HasMaxLength(255);
+
+                entity.Property(rd => rd.Description);
+
+                entity.Property(rd => rd.Status)
+                    .HasConversion<string>()
+                    .HasMaxLength(50)
+                    .IsRequired();
+
+                entity.HasOne(rd => rd.Job)
+                    .WithMany()
+                    .HasForeignKey(rd => rd.JobId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(rd => rd.College)
+                    .WithMany()
+                    .HasForeignKey(rd => rd.CollegeId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            // InterviewRound Configuration
+            builder.Entity<InterviewRound>(entity =>
+            {
+                entity.HasKey(ir => ir.InterviewRoundId);
+
+                entity.Property(ir => ir.RoundName)
+                    .HasMaxLength(100)
+                    .IsRequired();
+
+                entity.Property(ir => ir.RoundNumber)
+                    .IsRequired();
+
+                entity.Property(ir => ir.Description)
+                    .HasMaxLength(500);
+
+                entity.HasOne(ir => ir.Job)
+                    .WithMany()
+                    .HasForeignKey(ir => ir.JobId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasIndex(ir => new
+                {
+                    ir.JobId,
+                    ir.RoundNumber
+                }).IsUnique();
+            });
+
+            // InterviewSchedule Configuration
+            builder.Entity<InterviewSchedule>(entity =>
+            {
+                entity.HasKey(isd => isd.InterviewScheduleId);
+
+                entity.Property(isd => isd.ScheduledAt)
+                    .IsRequired();
+
+                entity.Property(isd => isd.MeetingLink)
+                    .HasMaxLength(500);
+
+                entity.Property(isd => isd.Venue)
+                    .HasMaxLength(255);
+
+                entity.Property(isd => isd.Status)
+                    .HasConversion<string>()
+                    .HasMaxLength(50)
+                    .IsRequired();
+
+                entity.Property(isd => isd.Feedback)
+                    .HasMaxLength(2000);
+
+                entity.HasOne(isd => isd.Application)
+                    .WithMany()
+                    .HasForeignKey(isd => isd.ApplicationId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(isd => isd.InterviewRound)
+                    .WithMany()
+                    .HasForeignKey(isd => isd.InterviewRoundId)
                     .OnDelete(DeleteBehavior.Restrict);
             });
         }
