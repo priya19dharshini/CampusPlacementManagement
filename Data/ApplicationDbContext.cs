@@ -31,6 +31,7 @@ namespace CampusPlacementManagement.Data
         public DbSet<JobApplication> JobApplications { get; set; }
         public DbSet<ApplicationStatusHistory> ApplicationStatusHistories { get; set; }
 
+
         public DbSet<RecruitmentDrive> RecruitmentDrives { get; set; }
 
         public DbSet<InterviewRound> InterviewRounds { get; set; }

@@ -1,6 +1,7 @@
 ﻿using CampusPlacementManagement.Data;
 using CampusPlacementManagement.Models;
 using CampusPlacementManagement.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace CampusPlacementManagement.Repositories;
 
