@@ -1,23 +1,22 @@
 ﻿using CampusPlacementManagement.Models;
 
-namespace CampusPlacementManagement.Repositories.Interfaces
+namespace CampusPlacementManagement.Repositories.Interfaces;
+
+public interface IPlacementOfficerRepository
 {
-    public interface IPlacementOfficerRepository
-    {
-        Task<PlacementOfficer?> GetByUserIdAsync(
-            string userId,
-            CancellationToken cancellationToken);
+    Task<PlacementOfficer?> GetByUserIdAsync(
+        string userId,
+        CancellationToken cancellationToken);
 
-        Task AddAsync(
-            PlacementOfficer placementOfficer,
-            CancellationToken cancellationToken);
+    Task AddAsync(
+        PlacementOfficer placementOfficer,
+        CancellationToken cancellationToken);
 
-        Task<PlacementOfficer?> GetByIdWithUserAsync(
-    int placementOfficerId,
-    CancellationToken cancellationToken);
-    }
+    Task<PlacementOfficer?> GetByIdWithUserAsync(
+        int placementOfficerId,
+        CancellationToken cancellationToken);
 
     Task<PlacementOfficer?> GetByUserIdWithUserAsync(
-    string userId,
-    CancellationToken cancellationToken);
-    }
+        string userId,
+        CancellationToken cancellationToken);
+}

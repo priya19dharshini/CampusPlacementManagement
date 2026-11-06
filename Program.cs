@@ -29,6 +29,7 @@ builder.Services.AddScoped<IRecruitmentDriveRepository, RecruitmentDriveReposito
 builder.Services.AddScoped<IInterviewRoundRepository, InterviewRoundRepository>();
 builder.Services.AddScoped<IInterviewScheduleRepository, InterviewScheduleRepository>();
 builder.Services.AddScoped<IJobApplicationRepository, JobApplicationRepository>();
+builder.Services.AddScoped<IReportRepository, ReportRepository>();
 
 builder.Services.AddScoped<ICollegeService, CollegeService>();
 builder.Services.AddScoped<IPlacementOfficerService,PlacementOfficerService>();
